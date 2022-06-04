@@ -9,16 +9,22 @@ const colorValSpan = document.querySelector('.color');
 
 let timerId = null;
 
+// function to switch color to random
+
 const backgroundColorSwitcher = function () {
   body.style.backgroundColor = getRandomHexColor();
   body.style.color = getRandomHexColor();
   colorValSpan.textContent = getRandomHexColor();
 };
 
+// start changing color
+
 btnStart.addEventListener('click', () => {
   timerId = setInterval(backgroundColorSwitcher, 1000);
   btnStart.disabled = true;
 });
+
+// stop changing color
 
 btnStop.addEventListener('click', () => {
   clearInterval(timerId);
