@@ -1,7 +1,8 @@
-// Opisany w dokumentacji
 import flatpickr from 'flatpickr';
-// Dodatkowy import stylów
 import 'flatpickr/dist/flatpickr.min.css';
+
+import Notiflix from 'notiflix';
+import 'notiflix/dist/notiflix-3.2.5.min.css';
 
 const options = {
   enableTime: true,
@@ -9,9 +10,20 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
+    
+    const today = new Date();
+    if (selectedDates[0] <= today) {
+      Notiflix.Notify.failure('Please choose a date in the future');
+    } else {
+      Notiflix.Notify.success(
+        'The selected date is correct. Press the "start" button to continue.'
+      );
+    }
   },
 };
+
+flatpickr('#datetime-picker', options);
+
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
