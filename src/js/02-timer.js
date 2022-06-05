@@ -44,8 +44,8 @@ function countdownTime() {
     startBtn.disabled = true;
 
     const pickedDateMs = new Date(dateChosen.value).getTime();
-    const currentDateMs = new Date().getTime();
-    const timeLeft = pickedDateMs - currentDateMs;
+    const now = new Date().getTime();
+    const timeLeft = pickedDateMs - now;
 
     const { days, hours, minutes, seconds } = convertMs(timeLeft);
 
