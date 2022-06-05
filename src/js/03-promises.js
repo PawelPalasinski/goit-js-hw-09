@@ -2,35 +2,50 @@ import Notiflix from 'notiflix';
 import 'notiflix/dist/notiflix-3.2.5.min.css';
 
 
-const FirstDelayMs = document.querySelector('[name="delay"]');
+const firstDelayMs = document.querySelector('[name="delay"]');
 const delayStepMs = document.querySelector('[name="step"]');
-const amount = documenty.querySelector('[name="amount"]');
+const amount = document.querySelector('[name="amount"]');
 
-const btnCreatePromises = document.querySelector('[type="submit"]');
+const form = document.querySelector(".form");
 
-const isSuccess = true;
+form.addEventListener('submit', submitCreatePromises);
 
-// const promise = new Promise((resolve, reject) => {
-//   setTimeout(() => {
-//     if (isSuccess) {
-//       resolve('Success! Value passed to resolve function');
-//     } else {
-//       reject('Error! Error passed to reject function');
-//     }
-//   }, 2000);
-// });
+function submitCreatePromises(e) {
+  e.preventDefault();
 
+  let delay = firstDelayMs.valueAsNumber;
+  const delayStepMsVal = delayStepMs.valueAsNumber;
+  const amountVal = amount.valueAsNumber;
 
+  for (let i = 1; i <= amountVal; i++){
+    createPromise(i, delay)
+      .then(({ i, delay }) => {
+        Notiflix.Notify.success(
+          `✅ Fulfilled promise ${i} in ${delay}ms`
+        );
+        console.log(`i = ${i}`)
+      })
+      .catch(({ i, delay }) => {
+        Notiflix.Notify.failure(
+          `❌ Rejected promise ${i} in ${delay}ms`
+        );
+        console.log(`i = ${i}`);
+      });
+    delay += delayStepMsVal;
+  };
+}
 
-
-
-
+//function
 
 function createPromise(position, delay) {
-  const shouldResolve = Math.random() > 0.3;
-  if (shouldResolve) {
-    // Fulfill
-  } else {
-    // Reject
-  }
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const shouldResolve = Math.random() > 0.3;
+      if (shouldResolve) {
+        resolve({ position, delay });
+      } else {
+        reject({ position, delay });
+      }
+    }, delay);
+  });
 }
