@@ -26,13 +26,21 @@ function submitCreatePromises(e) {
 
   for (let i = 1; i <= amountVal; i++) {
     createPromise(i, delay)
-      .then({ i, delay })
-      .catch({ i, delay });
+      .then(({ position, delay }) => {
+        Notiflix.Notify.success(
+          `✅ Fulfilled promise ${i} in ${delay}ms`
+        );
+      })
+      .catch(({ position, delay }) => {
+        Notiflix.Notify.failure(
+          `❌ Rejected promise ${i} in ${delay}ms`
+        );
+      });
     delay += delayStepMsVal;
   }
 }
 
-//function createPromise with Notiflix notifications
+//function createPromise
 
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
@@ -40,14 +48,8 @@ function createPromise(position, delay) {
       const shouldResolve = Math.random() > 0.3;
       if (shouldResolve) {
         resolve({ position, delay });
-        Notiflix.Notify.success(
-          `✅ Fulfilled promise ${[position]} in ${delay}ms`
-        );
       } else {
         reject({ position, delay });
-        Notiflix.Notify.failure(
-          `❌ Rejected promise ${position} in ${delay}ms`
-        );
       }
     }, delay);
   });
