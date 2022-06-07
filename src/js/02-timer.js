@@ -3,7 +3,6 @@ import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 import 'notiflix/dist/notiflix-3.2.5.min.css';
 
-
 const startBtn = document.querySelector('button[data-start]');
 const dateChosen = document.querySelector('#datetime-picker');
 const d = document.querySelector('[data-days]');
@@ -29,45 +28,46 @@ const options = {
       Notiflix.Notify.failure('Please choose a date in the future');
     } else {
       startBtn.disabled = false;
+
+      startBtn.addEventListener('click', countdownTime);
+
+      // time counter
+
+      function countdownTime() {
+        timer = setInterval(() => {
+          startBtn.disabled = true;
+
+          const timeLeft =
+            Number(new Date(dateChosen.value).getTime()) -
+            Number(new Date().getTime());
+
+          const { days, hours, minutes, seconds } = convertMs(timeLeft);
+
+          d.innerHTML = days < 10 ? addLeadingZero(days) : days;
+          h.innerHTML = hours < 10 ? addLeadingZero(hours) : hours;
+          m.innerHTML = minutes < 10 ? addLeadingZero(minutes) : minutes;
+          s.innerHTML = seconds < 10 ? addLeadingZero(seconds) : seconds;
+
+          if (timeLeft < 1000) {
+            clearInterval(timer);
+            startBtn.disabled = false;
+          }
+        }, 1000);
+      }
+
+      // addLeadingZero
+
+      function addLeadingZero(value) {
+        const stringValue = String(value);
+        return stringValue.padStart(2, '0');
+      }
     }
   },
 };
 
 flatpickr(dateChosen, options);
 
-// counter
-
-startBtn.addEventListener('click', countdownTime);
-
-function countdownTime() {
-  timer = setInterval(() => {
-    startBtn.disabled = true;
-
-    const timeLeft = Number(new Date(dateChosen.value).getTime()) - Number(new Date().getTime());
-
-    const { days, hours, minutes, seconds } = convertMs(timeLeft);
-
-    d.innerHTML = String(days).length < 2 ? addLeadingZero(days) : days;
-    h.innerHTML =
-      String(hours).length < 2 ? addLeadingZero(hours) : hours;
-    m.innerHTML =
-      String(minutes).length < 2 ? addLeadingZero(minutes) : minutes;
-    s.innerHTML =
-      String(seconds).length < 2 ? addLeadingZero(seconds) : seconds;
-
-    if (timeLeft < 1000) {
-      clearInterval(timer);
-      startBtn.disabled = false;
-    }
-  }, 1000);
-}
-
-function addLeadingZero(value) {
-  const stringValue = String(value);
-  return stringValue.padStart(2, '0');
-}
-
-// function to convert time to ms
+// convert
 
 function convertMs(ms) {
   const second = 1000;
