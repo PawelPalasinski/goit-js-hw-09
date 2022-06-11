@@ -36,9 +36,12 @@ const options = {
       function countdownTime() {
         timer = setInterval(() => {
           startBtn.disabled = true;
-          const a = new Date(dateChosen.value.replace(/-/g, '/')).getTime();
-          const b = new Date().getTime();
-          const timeLeft = a - b;
+
+          // https://stackoverflow.com/questions/4310953/invalid-date-in-safari
+
+          const dateChoosenMs = new Date(dateChosen.value.replace(/-/g, '/')).getTime();
+          const now = new Date().getTime();
+          const timeLeft = dateChoosenMs - now;
 
           const { days, hours, minutes, seconds } = convertMs(timeLeft);
 
