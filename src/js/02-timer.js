@@ -36,10 +36,9 @@ const options = {
       function countdownTime() {
         timer = setInterval(() => {
           startBtn.disabled = true;
-
-          const timeLeft =
-            Number(new Date(dateChosen.value).getTime()) -
-            Number(new Date().getTime());
+          const a = new Date(dateChosen.value.replace(/-/g, '/')).getTime();
+          const b = new Date().getTime();
+          const timeLeft = a - b;
 
           const { days, hours, minutes, seconds } = convertMs(timeLeft);
 
